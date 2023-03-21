@@ -69,4 +69,24 @@ var app = (function (){
         getBlueprintByAuthorAndName:getBlueprintByAuthorAndName,
         getNameAuthorBlueprints: getNameAuthorBlueprints
      }
+     return{
+             getBluePrints : getBluePrints,
+             setAuthor: setAuthor,
+             setBluePrints: setBluePrints,
+             drawBlueprint : drawBlueprint,
+             saveBlueprints : saveBlueprints,
+             deleteBlueprints : deleteBlueprints,
+             createBlueprints : createBlueprints,
+             init:function(){
+                 canvas = $("#canvas")[0];
+                 ctx = canvas.getContext("2d");
+                 let rect = canvas.getBoundingClientRect();
+                 if(window.PointerEvent){
+                     canvas.addEventListener("pointer", function(event){
+                         var newPoint = {x:event.clientX-rect.left, y:event.clientY-rect.top-10};
+                         repaint(ID,newPoint);
+                     });
+                 }
+             }
+         }
 })();
