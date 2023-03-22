@@ -3,6 +3,7 @@ var apimock = apimock;
 var app = (function (){
     var author;
     var blueprintName;
+    var totalPoints;
 
     function getName() {
             $("#name").text(author + "'s " + "blueprints:");
@@ -13,6 +14,12 @@ var app = (function (){
         apimock.getBlueprintsByAuthor(author,authorData);
 
      }
+     function getBluePrints(){
+             authorName();
+             getBluePrintsByNameAndAuthor();
+             updatePoints();
+         }
+
 
      var authorData = function( data) {
          $("#table tbody").empty();
@@ -40,6 +47,13 @@ var app = (function (){
              $("#points").text("Total user points: " + totalPuntos);
             }
          }
+         function updatePoints(){
+                 var points = blueprints.map(function(bp){
+                     return bp.points.length;
+                 })
+                 totalPoints = points.reduce(function(a,b){return a+b;});
+                 document.getElementById('totalPoints').innerHTML = totalPoints;
+             }
 
          function getBlueprintByAuthorAndName(data) {
                  author = $("#author").val();
@@ -69,6 +83,32 @@ var app = (function (){
         getBlueprintByAuthorAndName:getBlueprintByAuthorAndName,
         getNameAuthorBlueprints: getNameAuthorBlueprints
      }
+     function createBlueprints(){
+             authorName();
+             if(author == ''){
+                 alert("No ingreso autor");
+                 return;
+             }
+             var bpname = prompt("blueprint: ", "New blueprint");
+             if (bpname == '' || bpname == null){
+                 alert("No ingreso ningun nombre");
+                 return;
+             }
+             var newbp = {author: author, name: bpname, points: []};
+             apimock.postBlueprint( JSON.stringify(bpnew), readInputData);
+         }
+     function deleteBlueprints(){
+             canvas.width = canvas.width;
+             apimock.deletePrint($("#author").val(),ID);
+             $("table tbody").remove();
+             getBluePrintsByNameAndAuthor();
+         }
+     function saveBlueprints(){
+             console.log($("#author").val());
+             console.log(ID);
+             console.log(JSON.stringify(blueprints.points));
+             apimock.updateBlueprint($("#author").val(),ID,JSON.stringify(blueprints.points),fun);
+         }
      return{
              getBluePrints : getBluePrints,
              setAuthor: setAuthor,

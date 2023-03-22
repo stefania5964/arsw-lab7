@@ -17,7 +17,8 @@
 <h1 class="titulo">Blueprints</h1>
 <div class="autor">
     <span>Author</span><input id="author">
-    <button onclick="app.getNameAuthorBlueprints()">Get blueprints</button>
+    <button onclick="Blueprint.getBluePrints()">Get blueprints</button>
+    <button onclick="Blueprint.createBluePrints()" >Create BluePrint</button>
 </div>
 <div class="grid">
     <div class="tabla">
@@ -33,13 +34,19 @@
             <tbody>
             </tbody>
         </table>
-        <h2 id="points">Total Points</h2>
+        <h2 id='bluePrintsPoints'>Total Points:</h2>
+        <label id='totalPoints'></label>
     </div>
     <div class="canva">
         <h2 id="nameblu"></h2>
         <canvas id="myCanvas" width="500" height="450" style="border:1px solid #000000;"></canvas>
+        <div>
+            <button onclick="Blueprint.saveBlueprints()">Save/Update</button>
+            <button onclick="Blueprint.deleteBlueprints()">Delete</button>
+        </div>
     </div>
 </div>
+
 </body>
 
 </html>
