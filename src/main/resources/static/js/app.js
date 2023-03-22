@@ -4,10 +4,13 @@ var app = (function (){
     var author;
     var blueprintName;
     var totalPoints;
-
+    var fun=function(list){
+            blueprints = list;
+        }
     function getName() {
             $("#name").text(author + "'s " + "blueprints:");
         }
+
 
      function getNameAuthorBlueprints() {
         author = $("#author").val();
@@ -55,11 +58,26 @@ var app = (function (){
                  document.getElementById('totalPoints').innerHTML = totalPoints;
              }
 
-         function getBlueprintByAuthorAndName(data) {
-                 author = $("#author").val();
-                 blueprintName = data.id;
-                 $("#nameblu").text("Current blueprint: " + blueprintName);
-                 apimock.getBlueprintByAuthorAndName(author, blueprintName, canvasDraw);
+         function getBlueprintByAuthorAndName() {
+                 $("table tbody").empty();
+                         apimock.getBlueprintsByAuthor(author,fun);
+                         bps = blueprints;
+                         bps2 = blueprints.map(function(bp){;
+                             if(bp.points.length==1){
+                                 return {nombre:bp.name, puntos: bp.points[0].x + "," + bp.points[0].y};
+                             }
+                             else if(bp.points.length==2){
+                                 return {nombre:bp.name, puntos: bp.points[0].x + "," + bp.points[0].y + "|||" + bp.points[bp.points.length-1].x + "," + bp.points[bp.points.length-1].y};
+                             }
+                             else{
+                                 return {nombre:bp.name, puntos: bp.points.length};
+                             }
+                         })
+                         var bluePrintTable = bps2.map(function(plano){
+                             var columna = "<tr><td align=\"center\" id=\""+plano.nombre+"\">"+plano.nombre+"</td><td align=\"center\">"+plano.puntos+"</td><td><button onclick=\"Blueprint.drawBlueprint("+plano.nombre+".id)\">Open</button></td></tr>";
+                             $("table tbody").append(columna);
+                             return columna;
+                         });
              }
 
          function canvasDraw(data) {
@@ -79,6 +97,9 @@ var app = (function (){
                  }
                  ctx.stroke();
              }
+     function setBluePrints(blueprints){
+             this.blueprints = blueprints;
+         }
      return{
         getBlueprintByAuthorAndName:getBlueprintByAuthorAndName,
         getNameAuthorBlueprints: getNameAuthorBlueprints
@@ -108,6 +129,11 @@ var app = (function (){
              console.log(ID);
              console.log(JSON.stringify(blueprints.points));
              apimock.updateBlueprint($("#author").val(),ID,JSON.stringify(blueprints.points),fun);
+         }
+     function repaint(ID,newPoint){
+             bps.points.push(newPoint);
+             console.log(bps.points)
+             drawBlueprint(bps.name);
          }
      return{
              getBluePrints : getBluePrints,
